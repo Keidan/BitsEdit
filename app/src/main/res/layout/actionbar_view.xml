@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        app:layout_widthPercent="10%"
+        android:text="@string/tvDec"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/tvDec"/>
+
+    <EditText
+        app:layout_widthPercent="40%"
+        android:layout_toEndOf="@id/tvDec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:imeOptions="actionDone"
+        android:id="@+id/etDec"
+        android:hint="@string/tvDecText"/>
+
+    <TextView
+        app:layout_widthPercent="10%"
+        android:gravity="center"
+        android:layout_toEndOf="@id/etDec"
+        android:text="@string/tvHex"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/tvHex"/>
+
+    <EditText
+        app:layout_widthPercent="40%"
+        android:layout_toEndOf="@id/tvHex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:digits="0123456789ABCDEF"
+        android:inputType="textCapCharacters|textNoSuggestions"
+        android:id="@+id/etHex"
+        android:imeOptions="actionDone"
+        android:hint="@string/tvHexText"/>
+
+</android.support.percent.PercentRelativeLayout>
