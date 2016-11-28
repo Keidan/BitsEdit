@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BitsEdit</string>
-    <string name="tvDec">B10 :</string>
-    <string name="tvHex">B16 :</string>
+    <string name="tvDec">10:</string>
+    <string name="tvHex">16:</string>
     <string name="tvDecText">Base 10</string>
     <string name="tvHexText">Base 16</string>
     <string name="zero">0</string>
