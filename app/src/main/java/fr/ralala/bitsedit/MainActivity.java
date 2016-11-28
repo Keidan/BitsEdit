@@ -5,10 +5,8 @@ import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     setContentView(R.layout.activity_main);
     dotString = getString(R.string.dot);
     oneString = getString(R.string.one);
+
+    int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
 
     android.support.v7.app.ActionBar actionBar = getDelegate().getSupportActionBar();
     // add the custom view to the action bar
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           TextView tv = createTextView(false);
           tv.setText(dotString);
           tv.setId(id);
+          tv.setMinHeight(px);
           tv.setOnClickListener(this);
           llBinContent.addView(tv);
           bin.put(id, tv);
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       tvllp.bottomMargin = 0;
     } else {
       tvllp.topMargin = 10;
-      tvllp.bottomMargin = 10;
+      tvllp.bottomMargin = 0;
     }
     tv.setLayoutParams(tvllp);
     return tv;
