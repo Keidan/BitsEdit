@@ -1,6 +1,8 @@
 package fr.ralala.bitsedit;
 
 
+import java.math.BigInteger;
+
 /**
  *******************************************************************************
  * <p><b>Project BitsEdit</b><br/>
@@ -28,7 +30,11 @@ public class Bits {
   }
 
   public String getDecValue() {
-    return String.valueOf(value);
+    /* force unsigned long */
+    BigInteger b = BigInteger.valueOf(value);
+    if(b.signum() < 0)
+      b = b.add(BigInteger.ONE.shiftLeft(64));
+    return b.toString();
   }
 
   public String getHexValue() {
