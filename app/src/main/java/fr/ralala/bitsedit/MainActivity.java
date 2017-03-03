@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         llBinContent.setBackgroundColor(getColor(android.R.color.darker_gray));
         for (int j = 7; j >= 0; --j, --lbl) {
           TextView tv = createTextView(true);
+          tv.setId(-(id + 1));
           tv.setText(String.format(locale, "%02d", lbl));
           tv.setTypeface(tv.getTypeface(), Typeface.BOLD);
           llBinContent.addView(tv);
@@ -107,9 +108,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           tv.setOnClickListener(this);
           llBinContent.addView(tv);
           bin.put(id, tv);
+
         }
       }
       if(llBin != null) llBin.addView(llBinContent);
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    Bits bits = new Bits();
+    bits.setValue(globalValue.getDecValue(), 10);
+    for(int i = 0; i < bin.size(); ++i) {
+      TextView tv = bin.get(i);
+      tv.setText(!globalValue.isBit(i) ? dotString : oneString);
     }
   }
 
