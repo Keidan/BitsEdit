@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        app:layout_widthPercent="7%"
-        android:text="@string/tvDec"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/tvDec"/>
-
-    <EditText
-        app:layout_widthPercent="43%"
-        android:layout_toEndOf="@id/tvDec"
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".47" />
+
+    <TextView
+        android:text="@string/tvDec"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/tvDec"
+        app:layout_constraintBottom_toBottomOf="@id/etDec"
+        app:layout_constraintTop_toTopOf="@+id/etDec" />
+
+    <EditText
+        android:layout_toEndOf="@id/tvDec"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:inputType="numberDecimal"
         android:imeOptions="actionDone"
         android:id="@+id/etDec"
-        android:hint="@string/tvDecText"/>
+        android:hint="@string/tvDecText"
+        app:layout_constraintStart_toEndOf="@+id/tvDec"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineHorizontal"/>
 
     <TextView
-        app:layout_widthPercent="7%"
         android:gravity="center"
         android:layout_toEndOf="@id/etDec"
         android:text="@string/tvHex"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/tvHex"/>
+        android:id="@+id/tvHex"
+        app:layout_constraintBottom_toBottomOf="@id/etHex"
+        app:layout_constraintTop_toTopOf="@+id/etHex"
+        app:layout_constraintLeft_toRightOf="@+id/guidelineHorizontal"/>
 
     <EditText
-        app:layout_widthPercent="43%"
         android:layout_toEndOf="@id/tvHex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:maxLines="1"
         android:singleLine="true"
         android:digits="0123456789ABCDEF"
         android:inputType="textCapCharacters|textNoSuggestions"
         android:id="@+id/etHex"
         android:imeOptions="actionDone"
-        android:hint="@string/tvHexText"/>
+        android:hint="@string/tvHexText"
+        app:layout_constraintStart_toEndOf="@+id/tvHex"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</android.support.percent.PercentRelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -49,30 +48,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // add the custom view to the action bar
     if(actionBar != null) {
       actionBar.setCustomView(R.layout.actionbar_view);
-      etDec = (EditText) actionBar.getCustomView().findViewById(R.id.etDec);
-      etHex = (EditText) actionBar.getCustomView().findViewById(R.id.etHex);
+      etDec = actionBar.getCustomView().findViewById(R.id.etDec);
+      etHex = actionBar.getCustomView().findViewById(R.id.etHex);
 
-      TextView.OnEditorActionListener li = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-          if (actionId == EditorInfo.IME_ACTION_DONE) {
-            EditText et = (EditText)v;
-            int base = et.equals(etDec) ? 10 : 16;
-            globalValue.setValue(et.getText().toString(), base);
-            for(int i = 0; i < bin.size(); ++i) {
-              TextView tv = bin.get(i);
-              tv.setText(!globalValue.isBit(i) ? dotString : oneString);
-            }
-            EditText other = et.equals(etDec) ? etHex : etDec;
-            other.setText(globalValue.getValueFromBase(base == 10 ? 16 : 10));
-            InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            in.hideSoftInputFromWindow(v
-                .getApplicationWindowToken(),
-              InputMethodManager.HIDE_NOT_ALWAYS);
-            return true;
+      TextView.OnEditorActionListener li = (v, actionId, event) -> {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          EditText et = (EditText)v;
+          int base = et.equals(etDec) ? 10 : 16;
+          globalValue.setValue(et.getText().toString(), base);
+          for(int i = 0; i < bin.size(); ++i) {
+            TextView tv = bin.get(i);
+            tv.setText(!globalValue.isBit(i) ? dotString : oneString);
           }
-          return false;
+          EditText other = et.equals(etDec) ? etHex : etDec;
+          other.setText(globalValue.getValueFromBase(base == 10 ? 16 : 10));
+          InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+          if(in != null)
+            in.hideSoftInputFromWindow(v.getApplicationWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+          return true;
         }
+        return false;
       };
       etDec.setOnEditorActionListener(li);
       etHex.setOnEditorActionListener(li);
@@ -81,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
     }
 
-    LinearLayout llBin = (LinearLayout)findViewById(R.id.llBin);
-    Locale locale = getResources().getConfiguration().locale;
+    LinearLayout llBin = findViewById(R.id.llBin);
+    Locale locale = getResources().getConfiguration().getLocales().get(0);
     for(int i = 0, lbl = 63, id = 63; i < 16; ++i) {
       LinearLayout llBinContent = new LinearLayout(this);
       llBinContent.setOrientation(LinearLayout.HORIZONTAL);
@@ -91,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayout.LayoutParams.WRAP_CONTENT);
       llBinContent.setLayoutParams(llp);
       if(i%2 == 0) {
-        llBinContent.setBackgroundColor(getColor(android.R.color.darker_gray));
+        llBinContent.setBackgroundColor(getColor(R.color.colorBackground));
         for (int j = 7; j >= 0; --j, --lbl) {
           TextView tv = createTextView(true);
           tv.setId(-(id + 1));
