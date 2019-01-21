@@ -11,6 +11,7 @@ android {
     }
 
     compileSdkVersion 27
+    buildToolsVersion "27.0.2"
     defaultConfig {
         applicationId "fr.ralala.bitsedit"
         minSdkVersion 24
@@ -22,12 +23,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
         debug {
+            minifyEnabled false
             signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
         }
     }
     compileOptions {
