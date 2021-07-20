@@ -4,44 +4,75 @@ package fr.ralala.bitsedit;
 import java.math.BigInteger;
 
 /**
- *******************************************************************************
+ * ******************************************************************************
  * <p><b>Project BitsEdit</b><br/>
  * Bits edit
  * </p>
- * @author Keidan
  *
- *******************************************************************************
+ * @author Keidan
+ * <p>
+ * License: GPLv3
+ * </p>
+ * ******************************************************************************
  */
 
 public class Bits {
 
-  private long value = 0L;
+  private long mValue = 0L;
 
-  boolean isBit(int position) {
-    return (value & (1L << position)) != 0;
+  /**
+   * Tests if the bit of the specified position is not set.
+   * @param position The position.
+   * @return true unset, false set.
+   */
+  boolean isNotBit(int position) {
+    return (mValue & (1L << position)) == 0;
   }
 
+  /**
+   * Sets the bit of the specified position to 1 or 0.
+   * @param position The position.
+   * @param val The value (true set, false unset).
+   */
   void setBit(int position, boolean val) {
-    value = !val ? (value & ~(1 << position)) : (value | (1 << position));
+    mValue = !val ? (mValue & ~(1 << position)) : (mValue | (1 << position));
   }
 
+  /**
+   * Returns the value associated with the base.
+   * @param base The base.
+   * @return The value.
+   */
   String getValueFromBase(int base) {
     return base == 10 ? getDecValue() : getHexValue();
   }
 
+  /**
+   * Returns the decimal value.
+   * @return Decimal string.
+   */
   String getDecValue() {
     /* force unsigned long */
-    BigInteger b = BigInteger.valueOf(value);
-    if(b.signum() < 0)
+    BigInteger b = BigInteger.valueOf(mValue);
+    if (b.signum() < 0)
       b = b.add(BigInteger.ONE.shiftLeft(64));
     return b.toString();
   }
 
+  /**
+   * Returns the hex value.
+   * @return Hex string.
+   */
   String getHexValue() {
-    return String.format("%X", value);
+    return String.format("%X", mValue);
   }
 
+  /**
+   * Sets the value from string.
+   * @param val The value.
+   * @param base The base.
+   */
   void setValue(String val, int base) {
-    value = val.isEmpty() ? 0L : Long.valueOf(val, base);
+    mValue = val.isEmpty() ? 0L : Long.valueOf(val, base);
   }
 }

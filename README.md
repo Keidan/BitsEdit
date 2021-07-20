@@ -1,6 +1,6 @@
 # BitsEdit
-[![Build Status](https://img.shields.io/travis/Keidan/BitsEdit/master.svg?style=plastic)](https://travis-ci.org/Keidan/BitsEdit)
-[![GitHub license](https://img.shields.io/github/license/Keidan/BitsEdit.svg?style=plastic)](https://github.com/Keidan/BitsEdit/blob/master/license.txt)
+[![Build Status](https://travis-ci.com/Keidan/BitsEdit.svg?branch=master)][travis]
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)][license]
 
 (GPL) Android Bits editor is a FREE software.
 
@@ -20,5 +20,7 @@ download the software :
 
 	
 ## License
-
 [GPLv3](https://github.com/Keidan/BitsEdit/blob/master/license.txt)
+
+[travis]: https://travis-ci.com/Keidan/BitsEdit
+[license]: https://github.com/Keidan/BitsEdit/blob/master/license.txt
