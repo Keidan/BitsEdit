@@ -12,12 +12,39 @@
     tools:context="fr.ralala.bitsedit.MainActivity">
 
 
-
     <LinearLayout
-        android:id="@+id/llBin"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+      android:id="@+id/llScroll"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
+        <LinearLayout
+          android:id="@+id/llBin"
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+        </LinearLayout>
+
+        <RelativeLayout
+          android:layout_marginTop="@dimen/shift_layout_marginTop"
+          android:id="@+id/llShifts"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+            <Button
+              android:id="@+id/btShiftLeft"
+              android:text="@string/shift_left"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentStart="true"/>
+            <Button
+              android:id="@+id/btShiftRight"
+              android:text="@string/shift_right"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              tools:ignore="RelativeOverlap" />
+        </RelativeLayout>
     </LinearLayout>
+
 </ScrollView>

@@ -7,4 +7,6 @@
     <string name="zero">0</string>
     <string name="one">1</string>
     <string name="dot">.</string>
+    <string name="shift_left">&lt;&lt;</string>
+    <string name="shift_right">&gt;&gt;</string>
 </resources>

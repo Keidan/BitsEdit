@@ -8,4 +8,6 @@
     <color name="textColor">#FFFFFFFF</color>
     <color name="windowBackground">#FF303030</color>
     <color name="colorBackground">#FF424242</color>
+    <color name="colorButtonNormal">#FF424242</color>
+    <color name="colorControlNormal">#FFC5C5C5</color>
 </resources>

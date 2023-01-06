@@ -35,7 +35,25 @@ public class Bits {
    * @param val The value (true set, false unset).
    */
   void setBit(int position, boolean val) {
-    mValue = !val ? (mValue & ~(1 << position)) : (mValue | (1 << position));
+    int pos = (1 << position);
+    mValue = !val ? (mValue & ~(pos)) : (mValue | (pos));
+  }
+
+  /**
+   * Shifts to left.
+   */
+  void shiftLeft() {
+    if(mValue == 0)
+      mValue = 1;
+    else
+      mValue <<= 1;
+  }
+
+  /**
+   * Shifts to right.
+   */
+  void shiftRight() {
+    mValue >>= 1;
   }
 
   /**

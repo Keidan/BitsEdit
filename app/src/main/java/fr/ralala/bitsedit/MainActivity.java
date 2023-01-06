@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -62,7 +63,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
     }
 
+    findViewById(R.id.btShiftLeft).setOnClickListener(v -> shift(true));
+    findViewById(R.id.btShiftRight).setOnClickListener(v -> shift(false));
     createGrid();
+  }
+
+  /**
+   * Shifts the bits.
+   * @param left Left shift?
+   */
+  private void shift(boolean left) {
+    if(left)
+      mGlobalValue.shiftLeft();
+    else
+      mGlobalValue.shiftRight();
+    refreshBits();
+    setTexts();
   }
 
   /**
@@ -72,12 +88,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
     LinearLayout llBin = findViewById(R.id.llBin);
     Locale locale = Locale.getDefault();
-    for (int i = 0, lbl = 63, id = 63; i < 16; ++i) {
+    int lbl = 63;
+    int id = 63;
+    for (int i = 0; i < 16; ++i) {
       LinearLayout llBinContent = new LinearLayout(this);
       llBinContent.setOrientation(LinearLayout.HORIZONTAL);
       LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-          LinearLayout.LayoutParams.MATCH_PARENT,
-          LinearLayout.LayoutParams.WRAP_CONTENT);
+          ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.WRAP_CONTENT);
       llBinContent.setLayoutParams(llp);
       if (i % 2 == 0) {
         llBinContent.setBackgroundColor(getColor(R.color.colorBackground));
@@ -97,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           tv.setOnClickListener(this);
           llBinContent.addView(tv);
           mGrid.put(id, tv);
-
         }
       }
       if (llBin != null)
@@ -113,6 +130,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     super.onResume();
     Bits bits = new Bits();
     bits.setValue(mGlobalValue.getDecValue(), 10);
+    refreshBits();
+  }
+
+  /**
+   * Refreshes the bits textview's
+   */
+  private void refreshBits() {
     for (int i = 0; i < mGrid.size(); ++i) {
       TextView tv = mGrid.get(i);
       tv.setText(mGlobalValue.isNotBit(i) ? mDotString : mOneString);
@@ -129,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tv = new TextView(this);
     tv.setGravity(Gravity.CENTER);
     LinearLayout.LayoutParams tvLinearLayoutParams = new LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.WRAP_CONTENT,
-        LinearLayout.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
     tvLinearLayoutParams.width = 0;
     tvLinearLayoutParams.weight = 1;
     tvLinearLayoutParams.gravity = Gravity.FILL;
@@ -150,6 +174,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean value = tv.getText().toString().equals(mOneString);
     tv.setText(!value ? mOneString : mDotString);
     mGlobalValue.setBit(v.getId(), !value);
+    setTexts();
+  }
+
+  /**
+   * Sets texts.
+   */
+  private void setTexts() {
     mEtDec.setText(mGlobalValue.getDecValue());
     mEtHex.setText(mGlobalValue.getHexValue());
   }
