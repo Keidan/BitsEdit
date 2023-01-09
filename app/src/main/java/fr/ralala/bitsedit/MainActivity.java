@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
     LinearLayout llBin = findViewById(R.id.llBin);
     Locale locale = Locale.getDefault();
-    int lbl = 63;
-    int id = 63;
+    int lbl = Bits.MAX_BIT;
+    int id = Bits.MAX_BIT;
     for (int i = 0; i < 16; ++i) {
       LinearLayout llBinContent = new LinearLayout(this);
       llBinContent.setOrientation(LinearLayout.HORIZONTAL);

@@ -15,8 +15,9 @@ import java.math.BigInteger;
  * </p>
  * ******************************************************************************
  */
-
 public class Bits {
+  static final int MAX_BIT = 63;
+  static final int NB_SHIFT = 1;
   private static final String DEF_STR_0 = "0";
   private static final String DEF_STR_1 = "1";
   private static final String DEF_STR_MAX = "10000000000000000";
@@ -25,6 +26,7 @@ public class Bits {
 
   /**
    * Tests if the bit of the specified position is not set.
+   *
    * @param position The position.
    * @return true unset, false set.
    */
@@ -34,11 +36,12 @@ public class Bits {
 
   /**
    * Sets the bit of the specified position to 1 or 0.
+   *
    * @param position The position.
-   * @param val The value (true set, false unset).
+   * @param val      The value (true set, false unset).
    */
   void setBit(int position, boolean val) {
-    if(val)
+    if (val)
       mValue = mValue.setBit(position);
     else
       mValue = mValue.clearBit(position);
@@ -48,12 +51,15 @@ public class Bits {
    * Shifts to left.
    */
   void shiftLeft() {
-    if(mValue.longValue() == 0L)
+    if (mValue.longValue() == 0L)
       mValue = new BigInteger(DEF_STR_1, Radix.DEC.getRadix());
     else {
-      BigInteger bi = mValue.shiftLeft(1);
-      if(bi.compareTo(MAX_VALUE) < 0) {
+      BigInteger bi = mValue.shiftLeft(NB_SHIFT);
+      if (bi.compareTo(MAX_VALUE) < 0) {
         mValue = bi;
+      } else {
+        mValue = mValue.clearBit(MAX_BIT);
+        mValue = mValue.shiftLeft(1);
       }
     }
   }
@@ -62,11 +68,12 @@ public class Bits {
    * Shifts to right.
    */
   void shiftRight() {
-    mValue = mValue.shiftRight(1);
+    mValue = mValue.shiftRight(NB_SHIFT);
   }
 
   /**
    * Returns the value associated with the base.
+   *
    * @param base The base.
    * @return The value.
    */
@@ -76,6 +83,7 @@ public class Bits {
 
   /**
    * Returns the decimal value.
+   *
    * @return Decimal string.
    */
   String getDecValue() {
@@ -84,6 +92,7 @@ public class Bits {
 
   /**
    * Returns the hex value.
+   *
    * @return Hex string.
    */
   String getHexValue() {
@@ -92,7 +101,8 @@ public class Bits {
 
   /**
    * Sets the value from string.
-   * @param val The value.
+   *
+   * @param val  The value.
    * @param base The base.
    */
   void setValue(String val, Radix base) {
