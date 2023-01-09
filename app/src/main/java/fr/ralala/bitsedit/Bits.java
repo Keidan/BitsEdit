@@ -59,7 +59,7 @@ public class Bits {
         mValue = bi;
       } else {
         mValue = mValue.clearBit(MAX_BIT);
-        mValue = mValue.shiftLeft(1);
+        mValue = mValue.shiftLeft(NB_SHIFT);
       }
     }
   }
