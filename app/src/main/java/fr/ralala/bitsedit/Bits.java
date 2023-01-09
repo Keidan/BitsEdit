@@ -15,7 +15,6 @@ import java.math.BigInteger;
  * </p>
  * ******************************************************************************
  */
-
 public class Bits {
   static final int MAX_BIT = 63;
   static final int NB_SHIFT = 1;

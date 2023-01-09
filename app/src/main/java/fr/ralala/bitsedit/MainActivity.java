@@ -1,12 +1,16 @@
 package fr.ralala.bitsedit;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -63,22 +67,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
     }
 
-    findViewById(R.id.btShiftLeft).setOnClickListener(v -> shift(true));
-    findViewById(R.id.btShiftRight).setOnClickListener(v -> shift(false));
+    installShift(findViewById(R.id.btShiftLeft), true);
+    installShift(findViewById(R.id.btShiftRight), false);
     createGrid();
   }
 
   /**
    * Shifts the bits.
+   * @param v The view.
    * @param left Left shift?
    */
-  private void shift(boolean left) {
-    if(left)
-      mGlobalValue.shiftLeft();
-    else
-      mGlobalValue.shiftRight();
-    refreshBits();
-    setTexts();
+  private void installShift(View v, final boolean left) {
+    v.setOnTouchListener(new View.OnTouchListener() {
+
+      private Handler  mHandler;
+      private final Runnable mAction = new Runnable() {
+        @Override public void run() {
+          if(left)
+            mGlobalValue.shiftLeft();
+          else
+            mGlobalValue.shiftRight();
+          refreshBits();
+          setTexts();
+          mHandler.postDelayed(this, 250);
+        }
+      };
+
+      @SuppressLint("ClickableViewAccessibility")
+      @Override public boolean onTouch(View v, MotionEvent event) {
+        switch(event.getAction()) {
+          case MotionEvent.ACTION_DOWN:
+            if (mHandler != null) return true;
+            mHandler = new Handler(Looper.getMainLooper());
+            mHandler.post(mAction);
+            break;
+          case MotionEvent.ACTION_UP:
+            if (mHandler == null) return true;
+            mHandler.removeCallbacks(mAction);
+            mHandler = null;
+            break;
+          default:
+            break;
+        }
+        return false;
+      }
+
+    });
   }
 
   /**
@@ -88,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
     LinearLayout llBin = findViewById(R.id.llBin);
     Locale locale = Locale.getDefault();
-    int lbl = 63;
-    int id = 63;
+    int lbl = Bits.MAX_BIT;
+    int id = Bits.MAX_BIT;
     for (int i = 0; i < 16; ++i) {
       LinearLayout llBinContent = new LinearLayout(this);
       llBinContent.setOrientation(LinearLayout.HORIZONTAL);
