@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public void onResume() {
     super.onResume();
     Bits bits = new Bits();
-    bits.setValue(mGlobalValue.getDecValue(), 10);
+    bits.setValue(mGlobalValue.getDecValue(), Radix.DEC);
     refreshBits();
   }
 
@@ -200,14 +200,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
     if (actionId == EditorInfo.IME_ACTION_DONE) {
       EditText et = (EditText) v;
-      int base = et.equals(mEtDec) ? 10 : 16;
+      Radix base = et.equals(mEtDec) ? Radix.DEC : Radix.HEX;
       mGlobalValue.setValue(et.getText().toString(), base);
       for (int i = 0; i < mGrid.size(); ++i) {
         TextView tv = mGrid.get(i);
         tv.setText(mGlobalValue.isNotBit(i) ? mDotString : mOneString);
       }
       EditText other = et.equals(mEtDec) ? mEtHex : mEtDec;
-      other.setText(mGlobalValue.getValueFromBase(base == 10 ? 16 : 10));
+      other.setText(mGlobalValue.getValueFromBase(base == Radix.DEC ? Radix.HEX : Radix.DEC));
       InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       if (in != null)
         in.hideSoftInputFromWindow(v.getApplicationWindowToken(),

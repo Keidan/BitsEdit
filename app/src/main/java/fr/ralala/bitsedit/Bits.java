@@ -17,8 +17,11 @@ import java.math.BigInteger;
  */
 
 public class Bits {
-
-  private long mValue = 0L;
+  private static final String DEF_STR_0 = "0";
+  private static final String DEF_STR_1 = "1";
+  private static final String DEF_STR_MAX = "10000000000000000";
+  private static final BigInteger MAX_VALUE = new BigInteger(DEF_STR_MAX, Radix.HEX.getRadix());
+  private BigInteger mValue = new BigInteger(DEF_STR_0, Radix.DEC.getRadix());
 
   /**
    * Tests if the bit of the specified position is not set.
@@ -26,7 +29,7 @@ public class Bits {
    * @return true unset, false set.
    */
   boolean isNotBit(int position) {
-    return (mValue & (1L << position)) == 0;
+    return (mValue.longValue() & (1L << position)) == 0;
   }
 
   /**
@@ -35,25 +38,31 @@ public class Bits {
    * @param val The value (true set, false unset).
    */
   void setBit(int position, boolean val) {
-    int pos = (1 << position);
-    mValue = !val ? (mValue & ~(pos)) : (mValue | (pos));
+    if(val)
+      mValue = mValue.setBit(position);
+    else
+      mValue = mValue.clearBit(position);
   }
 
   /**
    * Shifts to left.
    */
   void shiftLeft() {
-    if(mValue == 0)
-      mValue = 1;
-    else
-      mValue <<= 1;
+    if(mValue.longValue() == 0L)
+      mValue = new BigInteger(DEF_STR_1, Radix.DEC.getRadix());
+    else {
+      BigInteger bi = mValue.shiftLeft(1);
+      if(bi.compareTo(MAX_VALUE) < 0) {
+        mValue = bi;
+      }
+    }
   }
 
   /**
    * Shifts to right.
    */
   void shiftRight() {
-    mValue >>= 1;
+    mValue = mValue.shiftRight(1);
   }
 
   /**
@@ -61,8 +70,8 @@ public class Bits {
    * @param base The base.
    * @return The value.
    */
-  String getValueFromBase(int base) {
-    return base == 10 ? getDecValue() : getHexValue();
+  String getValueFromBase(Radix base) {
+    return base == Radix.DEC ? getDecValue() : getHexValue();
   }
 
   /**
@@ -70,11 +79,7 @@ public class Bits {
    * @return Decimal string.
    */
   String getDecValue() {
-    /* force unsigned long */
-    BigInteger b = BigInteger.valueOf(mValue);
-    if (b.signum() < 0)
-      b = b.add(BigInteger.ONE.shiftLeft(64));
-    return b.toString();
+    return mValue.toString();
   }
 
   /**
@@ -90,7 +95,7 @@ public class Bits {
    * @param val The value.
    * @param base The base.
    */
-  void setValue(String val, int base) {
-    mValue = val.isEmpty() ? 0L : Long.valueOf(val, base);
+  void setValue(String val, Radix base) {
+    mValue = val.isEmpty() ? new BigInteger(DEF_STR_1, Radix.DEC.getRadix()) : new BigInteger(val, base.getRadix());
   }
 }
