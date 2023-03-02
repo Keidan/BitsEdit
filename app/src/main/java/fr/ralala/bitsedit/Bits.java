@@ -24,6 +24,14 @@ public class Bits {
   private static final BigInteger MAX_VALUE = new BigInteger(DEF_STR_MAX, Radix.HEX.getRadix());
   private BigInteger mValue = new BigInteger(DEF_STR_0, Radix.DEC.getRadix());
 
+  Bits() {
+
+  }
+
+  private Bits(BigInteger bi) {
+    mValue = bi;
+  }
+
   /**
    * Tests if the bit of the specified position is not set.
    *
@@ -107,5 +115,54 @@ public class Bits {
    */
   void setValue(String val, Radix base) {
     mValue = val.isEmpty() ? new BigInteger(DEF_STR_1, Radix.DEC.getRadix()) : new BigInteger(val, base.getRadix());
+  }
+
+  /**
+   * AND operation.
+   */
+  Bits and(Bits bits) {
+    return new Bits(mValue.and(bits.mValue));
+  }
+
+  /**
+   * AND NOT operation.
+   */
+  Bits andNot(Bits bits) {
+    return new Bits(mValue.andNot(bits.mValue));
+  }
+
+  /**
+   * OR operation.
+   */
+  Bits or(Bits bits) {
+    return new Bits(mValue.or(bits.mValue));
+  }
+
+  /**
+   * XOR operation.
+   */
+  Bits xor(Bits bits) {
+    return new Bits(mValue.xor(bits.mValue));
+  }
+
+  int getBitLength() {
+    return mValue.bitLength();
+  }
+  /**
+   * Returns the bits in binary format
+   *
+   * @return String
+   */
+  String toBinary(int maxBits) {
+    if(maxBits == 0) {
+      return "0";
+    }
+    StringBuilder sb = new StringBuilder();
+    for (int i = maxBits - 1; i >= 0; i--) {
+      sb.append(isNotBit(i) ? "0" : "1");
+      if (i > 0)
+        sb.append(" ");
+    }
+    return sb.toString();
   }
 }

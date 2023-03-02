@@ -13,6 +13,8 @@
         <item name="android:textColorHint">@color/textColor</item>
         <item name="android:colorButtonNormal">@color/colorButtonNormal</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -21,4 +23,18 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="Theme.AppCompat.Light.NoActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="AppTheme.InputLabel" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">@dimen/input_label_textSize</item>
+        <item name="android:paddingTop">@dimen/input_label_paddingTop</item>
+        <item name="android:paddingBottom">@dimen/input_label_paddingBottom</item>
+        <item name="android:paddingStart">@dimen/input_label_paddingStart</item>
+        <item name="android:paddingEnd">@dimen/input_label_paddingEnd</item>
+    </style>
 </resources>

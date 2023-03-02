@@ -1,4 +1,5 @@
 package fr.ralala.bitsedit;
+
 /**
  * ******************************************************************************
  * <p><b>Project BitsEdit</b><br/>
@@ -13,8 +14,8 @@ package fr.ralala.bitsedit;
  */
 public enum Radix {
 
- DEC(10),
- HEX(16);
+  DEC(10),
+  HEX(16);
 
   private final int mRadix;
 

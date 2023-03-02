@@ -2,6 +2,7 @@ package fr.ralala.bitsedit;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,21 +70,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     installShift(findViewById(R.id.btShiftLeft), true);
     installShift(findViewById(R.id.btShiftRight), false);
+    findViewById(R.id.btMore).setOnClickListener((v) -> startActivity(new Intent(this, MoreActivity.class)));
     createGrid();
   }
 
   /**
    * Shifts the bits.
-   * @param v The view.
+   *
+   * @param v    The view.
    * @param left Left shift?
    */
   private void installShift(View v, final boolean left) {
     v.setOnTouchListener(new View.OnTouchListener() {
 
-      private Handler  mHandler;
+      private Handler mHandler;
       private final Runnable mAction = new Runnable() {
-        @Override public void run() {
-          if(left)
+        @Override
+        public void run() {
+          if (left)
             mGlobalValue.shiftLeft();
           else
             mGlobalValue.shiftRight();
@@ -94,8 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       };
 
       @SuppressLint("ClickableViewAccessibility")
-      @Override public boolean onTouch(View v, MotionEvent event) {
-        switch(event.getAction()) {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:
             if (mHandler != null) return true;
             mHandler = new Handler(Looper.getMainLooper());

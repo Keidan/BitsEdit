@@ -3,4 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="shift_layout_marginTop">20dp</dimen>
+    <dimen name="touch_target_size">48dp</dimen>
+
+    <!-- InputLabel -->
+    <dimen name="input_label_paddingTop">3dp</dimen>
+    <dimen name="input_label_paddingBottom">2dp</dimen>
+    <dimen name="input_label_paddingStart">4dp</dimen>
+    <dimen name="input_label_paddingEnd">4dp</dimen>
+    <dimen name="input_label_textSize">14sp</dimen>
 </resources>

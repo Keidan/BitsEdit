@@ -14,7 +14,7 @@
         app:layout_constraintGuide_percent=".47" />
 
         <TextView
-            android:text="@string/tvDec"
+            android:text="@string/b10"
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -30,7 +30,7 @@
             android:inputType="numberDecimal"
             android:imeOptions="actionDone"
             android:id="@+id/etDec"
-            android:hint="@string/tvDecText"
+            android:hint="@string/base10"
             app:layout_constraintStart_toEndOf="@+id/tvDec"
             app:layout_constraintEnd_toEndOf="@+id/guidelineHorizontal"
             android:autofillHints="@null" />
@@ -38,7 +38,7 @@
         <TextView
             android:gravity="center"
             android:layout_toEndOf="@id/etDec"
-            android:text="@string/tvHex"
+            android:text="@string/b16"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/tvHex"
@@ -56,7 +56,7 @@
             android:inputType="textCapCharacters|textNoSuggestions"
             android:id="@+id/etHex"
             android:imeOptions="actionDone"
-            android:hint="@string/tvHexText"
+            android:hint="@string/base16"
             app:layout_constraintStart_toEndOf="@+id/tvHex"
             app:layout_constraintEnd_toEndOf="parent"
             android:autofillHints="@null" />
