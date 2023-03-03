@@ -1,126 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/activity_more"
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/activity_more"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:paddingBottom="@dimen/activity_vertical_margin"
   android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
   android:paddingTop="@dimen/activity_vertical_margin"
-  tools:context="fr.ralala.bitsedit.MoreActivity">
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingBottom="@dimen/activity_vertical_margin"
+  tools:context="fr.ralala.bitsedit.ui.MoreActivity">
+
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-      android:id="@+id/ll1"
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/tilValue1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:layout_alignParentStart="true">
+      android:layout_alignParentTop="true">
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilValue1"
-        android:layout_width="0dp"
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tietValue1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.65">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/tietValue1"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:digits=" 0123456789"
-          android:fontFamily="monospace"
-          android:hint="@string/value1"
-          android:inputType="number"
-          android:maxLength="20"
-          android:maxLines="1"
-          android:minHeight="@dimen/touch_target_size"
-          tools:ignore="VisualLintTextFieldSize" />
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spInputType1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.35"
-        android:contentDescription="@string/base"
+        android:digits="0123456789"
+        android:fontFamily="monospace"
+        android:hint="@string/value1"
+        android:inputType="number"
+        android:maxLength="20"
+        android:maxLines="1"
         android:minHeight="@dimen/touch_target_size"
+        android:imeOptions="actionNext"
+        tools:ignore="VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+      android:id="@+id/btGroupBase1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/tilValue1"
+      android:gravity="center_horizontal">
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btBaseDec1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/decimal"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btBaseHex1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/hexadecimal"
         tools:ignore="DuplicateSpeakableTextCheck" />
     </LinearLayout>
-    <LinearLayout
-      android:id="@+id/ll2"
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/tilValue2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/ll1"
-      android:layout_alignParentStart="true">
+      android:layout_below="@id/btGroupBase1">
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilValue2"
-        android:layout_width="0dp"
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tietValue2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.65">
+        android:digits="0123456789"
+        android:fontFamily="monospace"
+        android:hint="@string/value2"
+        android:inputType="number"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:minHeight="@dimen/touch_target_size"
+        android:imeOptions="actionDone"
+        tools:ignore="VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/tietValue2"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:digits=" 0123456789"
-          android:fontFamily="monospace"
-          android:hint="@string/value2"
-          android:inputType="number"
-          android:maxLength="20"
-          android:maxLines="1"
-          android:minHeight="@dimen/touch_target_size"
-          tools:ignore="VisualLintTextFieldSize" />
-      </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+      android:id="@+id/btGroupBase2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/tilValue2"
+      android:gravity="center_horizontal">
 
-      <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spInputType2"
-        android:layout_width="0dp"
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btBaseDec2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.35"
-        android:contentDescription="@string/base"
-        android:minHeight="@dimen/touch_target_size"/>
+        android:layout_gravity="center_vertical"
+        android:text="@string/decimal" />
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btBaseHex2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/hexadecimal" />
     </LinearLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
       android:id="@+id/tvOperation"
-      android:text="@string/operation"
-      android:layout_alignParentStart="true"
-      android:layout_below="@id/ll2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fontFamily="monospace"
-      style="@style/AppTheme.InputLabel"/>
+      android:layout_below="@id/btGroupBase2"
+      android:layout_alignParentStart="true"
+      android:gravity="center_vertical"
+      android:text="@string/operation" />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-      android:id="@+id/spOperation"
+    <LinearLayout
+      android:id="@+id/btGroupOperations1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@id/tvOperation"
-      android:contentDescription="@string/operation"
-      android:minHeight="@dimen/touch_target_size"
-      tools:ignore="DuplicateSpeakableTextCheck" />
+      android:gravity="center_horizontal">
 
-    <TextView
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btAnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/buttons_margin"
+        android:text="@string/and" />
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btAndNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/buttons_margin"
+        android:text="@string/and_not" />
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/buttons_margin"
+        android:text="@string/not" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/btGroupOperations2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/btGroupOperations1"
+      android:gravity="center_horizontal">
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btOr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/buttons_margin"
+        android:text="@string/or" />
+
+      <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btXor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/buttons_margin"
+        android:text="@string/xor" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
       android:id="@+id/tvResultLabel"
-      android:text="@string/result"
-      android:layout_alignParentStart="true"
-      android:layout_below="@id/spOperation"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_below="@id/btGroupOperations2"
       android:fontFamily="monospace"
-      style="@style/AppTheme.InputLabel"/>
+      android:text="@string/result" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
       android:id="@+id/tvResult"
-      android:text="@null"
-      android:layout_alignParentStart="true"
-      android:layout_below="@id/tvResultLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fontFamily="monospace"/>
+      android:layout_below="@id/tvResultLabel"
+      android:layout_alignParentStart="true"
+      android:fontFamily="monospace"
+      android:text="@null" />
   </RelativeLayout>
 </ScrollView>

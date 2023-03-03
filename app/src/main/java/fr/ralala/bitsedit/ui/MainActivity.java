@@ -1,4 +1,4 @@
-package fr.ralala.bitsedit;
+package fr.ralala.bitsedit.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,14 +16,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Objects;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import fr.ralala.bitsedit.R;
+import fr.ralala.bitsedit.utils.Bits;
+import fr.ralala.bitsedit.utils.Radix;
 
 /**
  * ******************************************************************************
@@ -41,9 +50,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private String mDotString = null;
   private String mOneString = null;
   private final Bits mGlobalValue = new Bits();
-  private final SparseArray<TextView> mGrid = new SparseArray<>();
-  private EditText mEtDec = null;
-  private EditText mEtHex = null;
+  private final SparseArray<AppCompatTextView> mGrid = new SparseArray<>();
+  private TextInputEditText mEtDec = null;
+  private TextInputEditText mEtHex = null;
+  private @ColorInt int mColorDot;
+  private @ColorInt int mColorOne;
 
   /**
    * Called when the activity is created.
@@ -56,10 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     setContentView(R.layout.activity_main);
     mDotString = getString(R.string.dot);
     mOneString = getString(R.string.one);
+    mColorOne = ContextCompat.getColor(this, R.color.colorAccent);
+    mColorDot = ContextCompat.getColor(this, R.color.textColor);
 
     ActionBar actionBar = getDelegate().getSupportActionBar();
     // add the custom view to the action bar
-    if (actionBar != null) {
+    if (null != actionBar) {
       actionBar.setCustomView(R.layout.actionbar_view);
       mEtDec = actionBar.getCustomView().findViewById(R.id.etDec);
       mEtHex = actionBar.getCustomView().findViewById(R.id.etHex);
@@ -70,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     installShift(findViewById(R.id.btShiftLeft), true);
     installShift(findViewById(R.id.btShiftRight), false);
-    findViewById(R.id.btMore).setOnClickListener((v) -> startActivity(new Intent(this, MoreActivity.class)));
+    findViewById(R.id.btMore).setOnClickListener(v -> startActivity(new Intent(this, MoreActivity.class)));
     createGrid();
   }
 
@@ -102,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:
-            if (mHandler != null) return true;
+            if (null != mHandler) return true;
             mHandler = new Handler(Looper.getMainLooper());
             mHandler.post(mAction);
             break;
           case MotionEvent.ACTION_UP:
-            if (mHandler == null) return true;
+            if (null == mHandler) return true;
             mHandler.removeCallbacks(mAction);
             mHandler = null;
             break;
@@ -136,10 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.WRAP_CONTENT);
       llBinContent.setLayoutParams(llp);
-      if (i % 2 == 0) {
+      if (0 == (i % 2)) {
         llBinContent.setBackgroundColor(getColor(R.color.colorBackground));
         for (int j = 7; j >= 0; --j, --lbl) {
-          TextView tv = createTextView(true);
+          AppCompatTextView tv = createTextView(true);
           tv.setId(-(id + 1));
           tv.setText(String.format(locale, "%02d", lbl));
           tv.setTypeface(tv.getTypeface(), Typeface.BOLD);
@@ -147,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
       } else {
         for (int j = 7; j >= 0; --j, --id) {
-          TextView tv = createTextView(false);
-          tv.setText(mDotString);
+          AppCompatTextView tv = createTextView(false);
+          setText(tv, mDotString);
           tv.setId(id);
           tv.setMinHeight(px);
           tv.setOnClickListener(this);
@@ -156,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           mGrid.put(id, tv);
         }
       }
-      if (llBin != null)
+      if (null != llBin)
         llBin.addView(llBinContent);
     }
   }
@@ -177,8 +190,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    */
   private void refreshBits() {
     for (int i = 0; i < mGrid.size(); ++i) {
-      TextView tv = mGrid.get(i);
-      tv.setText(mGlobalValue.isNotBit(i) ? mDotString : mOneString);
+      AppCompatTextView tv = mGrid.get(i);
+      setText(tv, mGlobalValue.isNotBit(i) ? mDotString : mOneString);
     }
   }
 
@@ -188,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    * @param label Is label?
    * @return The text view.
    */
-  private TextView createTextView(boolean label) {
-    TextView tv = new TextView(this);
+  private AppCompatTextView createTextView(boolean label) {
+    AppCompatTextView tv = new AppCompatTextView(this);
     tv.setGravity(Gravity.CENTER);
     LinearLayout.LayoutParams tvLinearLayoutParams = new LinearLayout.LayoutParams(
         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -209,11 +222,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    * @param v The associated view.
    */
   public void onClick(View v) {
-    TextView tv = (TextView) v;
+    AppCompatTextView tv = (AppCompatTextView) v;
     boolean value = tv.getText().toString().equals(mOneString);
-    tv.setText(!value ? mOneString : mDotString);
+    setText(tv, !value ? mOneString : mDotString);
     mGlobalValue.setBit(v.getId(), !value);
     setTexts();
+  }
+
+  /**
+   * This function changes the text of an AppCompatTextView and also changes the color depending on the input
+   * @param tv The view.
+   * @param text The text
+   */
+  private void setText(AppCompatTextView tv, String text) {
+    if(text.equals(mOneString))
+      tv.setTextColor(mColorOne);
+    else
+      tv.setTextColor(mColorDot);
+    tv.setText(text);
   }
 
   /**
@@ -237,18 +263,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    * @return Return true if you have consumed the action, else false.
    */
   public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-    if (actionId == EditorInfo.IME_ACTION_DONE) {
-      EditText et = (EditText) v;
+    if (EditorInfo.IME_ACTION_DONE == actionId) {
+      TextInputEditText et = (TextInputEditText) v;
       Radix base = et.equals(mEtDec) ? Radix.DEC : Radix.HEX;
-      mGlobalValue.setValue(et.getText().toString(), base);
+      mGlobalValue.setValue(Objects.requireNonNull(et.getText()).toString(), base);
       for (int i = 0; i < mGrid.size(); ++i) {
-        TextView tv = mGrid.get(i);
-        tv.setText(mGlobalValue.isNotBit(i) ? mDotString : mOneString);
+        AppCompatTextView tv = mGrid.get(i);
+        setText(tv, mGlobalValue.isNotBit(i) ? mDotString : mOneString);
       }
-      EditText other = et.equals(mEtDec) ? mEtHex : mEtDec;
+      TextInputEditText other = et.equals(mEtDec) ? mEtHex : mEtDec;
       other.setText(mGlobalValue.getValueFromBase(base == Radix.DEC ? Radix.HEX : Radix.DEC));
       InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-      if (in != null)
+      if (null != in)
         in.hideSoftInputFromWindow(v.getApplicationWindowToken(),
             InputMethodManager.HIDE_NOT_ALWAYS);
       return true;

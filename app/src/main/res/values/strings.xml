@@ -13,11 +13,15 @@
     <string name="value1">Value 1</string>
     <string name="value2">Value 2</string>
     <string name="base">Base</string>
-    <string name="operation">Operation</string>
+    <string name="operation">Operation: </string>*
+    <string name="result">Result: </string>
+    <string name="error">ERROR</string>
+    <string name="empty"/>
+    <string name="decimal">DEC</string>
+    <string name="hexadecimal">HEX</string>
     <string name="and">AND</string>
     <string name="and_not">AND NOT</string>
+    <string name="not">NOT</string>
     <string name="or">OR</string>
     <string name="xor">XOR</string>
-    <string name="result">Result:</string>
-    <string name="error">ERROR</string>
 </resources>

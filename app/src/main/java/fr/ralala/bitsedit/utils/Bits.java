@@ -1,4 +1,4 @@
-package fr.ralala.bitsedit;
+package fr.ralala.bitsedit.utils;
 
 
 import java.math.BigInteger;
@@ -16,15 +16,15 @@ import java.math.BigInteger;
  * ******************************************************************************
  */
 public class Bits {
-  static final int MAX_BIT = 63;
-  static final int NB_SHIFT = 1;
+  public static final int MAX_BIT = 63;
+  public static final int NB_SHIFT = 1;
   private static final String DEF_STR_0 = "0";
   private static final String DEF_STR_1 = "1";
   private static final String DEF_STR_MAX = "10000000000000000";
   private static final BigInteger MAX_VALUE = new BigInteger(DEF_STR_MAX, Radix.HEX.getRadix());
   private BigInteger mValue = new BigInteger(DEF_STR_0, Radix.DEC.getRadix());
 
-  Bits() {
+  public Bits() {
 
   }
 
@@ -38,7 +38,7 @@ public class Bits {
    * @param position The position.
    * @return true unset, false set.
    */
-  boolean isNotBit(int position) {
+  public boolean isNotBit(int position) {
     return (mValue.longValue() & (1L << position)) == 0;
   }
 
@@ -48,7 +48,7 @@ public class Bits {
    * @param position The position.
    * @param val      The value (true set, false unset).
    */
-  void setBit(int position, boolean val) {
+  public void setBit(int position, boolean val) {
     if (val)
       mValue = mValue.setBit(position);
     else
@@ -58,8 +58,8 @@ public class Bits {
   /**
    * Shifts to left.
    */
-  void shiftLeft() {
-    if (mValue.longValue() == 0L)
+  public void shiftLeft() {
+    if (0L == mValue.longValue())
       mValue = new BigInteger(DEF_STR_1, Radix.DEC.getRadix());
     else {
       BigInteger bi = mValue.shiftLeft(NB_SHIFT);
@@ -75,7 +75,7 @@ public class Bits {
   /**
    * Shifts to right.
    */
-  void shiftRight() {
+  public void shiftRight() {
     mValue = mValue.shiftRight(NB_SHIFT);
   }
 
@@ -85,7 +85,7 @@ public class Bits {
    * @param base The base.
    * @return The value.
    */
-  String getValueFromBase(Radix base) {
+  public String getValueFromBase(Radix base) {
     return base == Radix.DEC ? getDecValue() : getHexValue();
   }
 
@@ -94,7 +94,7 @@ public class Bits {
    *
    * @return Decimal string.
    */
-  String getDecValue() {
+  public String getDecValue() {
     return mValue.toString();
   }
 
@@ -103,7 +103,7 @@ public class Bits {
    *
    * @return Hex string.
    */
-  String getHexValue() {
+  public String getHexValue() {
     return String.format("%X", mValue);
   }
 
@@ -113,48 +113,56 @@ public class Bits {
    * @param val  The value.
    * @param base The base.
    */
-  void setValue(String val, Radix base) {
+  public void setValue(String val, Radix base) {
     mValue = val.isEmpty() ? new BigInteger(DEF_STR_1, Radix.DEC.getRadix()) : new BigInteger(val, base.getRadix());
   }
 
   /**
    * AND operation.
    */
-  Bits and(Bits bits) {
+  public Bits and(Bits bits) {
     return new Bits(mValue.and(bits.mValue));
   }
 
   /**
    * AND NOT operation.
    */
-  Bits andNot(Bits bits) {
+  public Bits andNot(Bits bits) {
     return new Bits(mValue.andNot(bits.mValue));
+  }
+
+  /**
+   * AND operation.
+   */
+  public Bits not() {
+    return new Bits(mValue.not());
   }
 
   /**
    * OR operation.
    */
-  Bits or(Bits bits) {
+  public Bits or(Bits bits) {
     return new Bits(mValue.or(bits.mValue));
   }
 
   /**
    * XOR operation.
    */
-  Bits xor(Bits bits) {
+  public Bits xor(Bits bits) {
     return new Bits(mValue.xor(bits.mValue));
   }
 
-  int getBitLength() {
+  public int getBitLength() {
     return mValue.bitLength();
   }
+
   /**
    * Returns the bits in binary format
    *
    * @return String
    */
-  String toBinary(int maxBits) {
-    if(maxBits == 0) {
+  public String toBinary(int maxBits) {
+    if (0 == maxBits) {
       return "0";
     }
     StringBuilder sb = new StringBuilder();

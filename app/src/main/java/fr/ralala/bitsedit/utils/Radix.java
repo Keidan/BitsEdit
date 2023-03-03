@@ -1,4 +1,4 @@
-package fr.ralala.bitsedit;
+package fr.ralala.bitsedit.utils;
 
 /**
  * ******************************************************************************
@@ -23,7 +23,7 @@ public enum Radix {
     mRadix = radix;
   }
 
-  int getRadix() {
+  public int getRadix() {
     return mRadix;
   }
 }

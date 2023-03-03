@@ -1,64 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="horizontal">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".47" />
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guidelineHorizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent=".47" />
 
-        <TextView
-            android:text="@string/b10"
-            android:gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/tvDec"
-            app:layout_constraintBottom_toBottomOf="@id/etDec"
-            app:layout_constraintTop_toTopOf="@+id/etDec"
-            app:layout_constraintStart_toStartOf="parent" />
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/tvDec"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="@string/b10"
+    app:layout_constraintBottom_toBottomOf="@id/etDec"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/etDec" />
 
-        <EditText
-            android:layout_toEndOf="@id/tvDec"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="numberDecimal"
-            android:imeOptions="actionDone"
-            android:id="@+id/etDec"
-            android:hint="@string/base10"
-            app:layout_constraintStart_toEndOf="@+id/tvDec"
-            app:layout_constraintEnd_toEndOf="@+id/guidelineHorizontal"
-            android:autofillHints="@null" />
+  <com.google.android.material.textfield.TextInputEditText
+    android:id="@+id/etDec"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_toEndOf="@id/tvDec"
+    android:autofillHints="@null"
+    android:hint="@string/base10"
+    android:imeOptions="actionDone"
+    android:inputType="numberDecimal"
+    app:layout_constraintEnd_toEndOf="@+id/guidelineHorizontal"
+    app:layout_constraintStart_toEndOf="@+id/tvDec" />
 
-        <TextView
-            android:gravity="center"
-            android:layout_toEndOf="@id/etDec"
-            android:text="@string/b16"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/tvHex"
-            app:layout_constraintBottom_toBottomOf="@id/etHex"
-            app:layout_constraintTop_toTopOf="@+id/etHex"
-            app:layout_constraintStart_toEndOf="@+id/guidelineHorizontal"/>
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/tvHex"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_toEndOf="@id/etDec"
+    android:gravity="center"
+    android:text="@string/b16"
+    app:layout_constraintBottom_toBottomOf="@id/etHex"
+    app:layout_constraintStart_toEndOf="@+id/guidelineHorizontal"
+    app:layout_constraintTop_toTopOf="@+id/etHex" />
 
-        <EditText
-            android:layout_toEndOf="@id/tvHex"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:digits="0123456789ABCDEF"
-            android:inputType="textCapCharacters|textNoSuggestions"
-            android:id="@+id/etHex"
-            android:imeOptions="actionDone"
-            android:hint="@string/base16"
-            app:layout_constraintStart_toEndOf="@+id/tvHex"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:autofillHints="@null" />
+  <com.google.android.material.textfield.TextInputEditText
+    android:id="@+id/etHex"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_toEndOf="@id/tvHex"
+    android:autofillHints="@null"
+    android:digits="0123456789ABCDEF"
+    android:hint="@string/base16"
+    android:imeOptions="actionDone"
+    android:inputType="textCapCharacters|textNoSuggestions"
+    android:maxLines="1"
+    android:singleLine="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/tvHex" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
