@@ -1,6 +1,6 @@
 package fr.ralala.bitsedit.ui;
 
-import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,20 +8,20 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
-
-import com.google.android.material.textfield.TextInputEditText;
+import androidx.core.view.ViewCompat;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static fr.ralala.bitsedit.ui.ButtonGroup.ButtonGroupListener;
 
@@ -42,7 +42,7 @@ import fr.ralala.bitsedit.utils.Radix;
  * </p>
  * ******************************************************************************
  */
-public class MoreActivity extends AppCompatActivity implements TextWatcher {
+public class MoreActivity extends AppCompatActivity implements TextWatcher, TextView.OnEditorActionListener {
   private static final String COLON = ":";
   private static final String SP = " ";
   private static final String NL = "\n";
@@ -51,29 +51,13 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
   private String mTextBase16 = "";
   private final Bits mGlobalValue1 = new Bits();
   private final Bits mGlobalValue2 = new Bits();
-  private TextInputEditText mTextValue1;
-  private TextInputEditText mTextValue2;
+  private AppCompatEditText mTextValue1;
+  private AppCompatEditText mTextValue2;
   private AppCompatTextView mTvResult;
   private boolean mIgnore = false;
   private boolean mBaseHex1 = false;
   private boolean mBaseHex2 = false;
   private Operation mOperation = Operation.AND;
-  /* https://stackoverflow.com/questions/10648449/how-do-i-set-a-edittext-to-the-input-of-only-hexadecimal-numbers/17355026 */
-  private final InputFilter mInputFilterTextHex = (source, start, end, dest, dStart, dEnd) -> {
-    Pattern pattern = Pattern.compile("^\\p{XDigit}+$");
-    StringBuilder sb = new StringBuilder();
-    for (int i = start; i < end; i++) {
-      if (!Character.isLetterOrDigit(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i))) {
-        return "";
-      }
-      Matcher matcher = pattern.matcher(String.valueOf(source.charAt(i)));
-      if (!matcher.matches()) {
-        return "";
-      }
-      sb.append(source.charAt(i));
-    }
-    return sb.toString();
-  };
 
   /**
    * Called when the activity is created.
@@ -94,24 +78,33 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
     mTextBase10 = getString(R.string.base10);
     mTextBase16 = getString(R.string.base16);
 
-    mTextValue1 = findViewById(R.id.tietValue1);
-    mTextValue2 = findViewById(R.id.tietValue2);
+    mTextValue1 = findViewById(R.id.etValue1);
+    mTextValue2 = findViewById(R.id.etValue2);
     mTvResult = findViewById(R.id.tvResult);
+
+    @ColorInt int accent = UiHelper.getSystemAccentColor(this);
+    ColorStateList csl = ColorStateList.valueOf(accent);
+    ViewCompat.setBackgroundTintList(mTextValue1, csl);
+    ViewCompat.setBackgroundTintList(mTextValue2, csl);
+
 
     final InputFilter[] defaultInputFiler1 = mTextValue1.getFilters();
     final InputFilter[] defaultInputFiler2 = mTextValue2.getFilters();
 
     ButtonGroupListener liBase1 = id -> {
+      clearsStates();
       mBaseHex1 = id == R.id.btBaseHex1;
       updateText(mBaseHex1, mTextValue1, mGlobalValue1);
       changeInputType(mBaseHex1, mTextValue1, defaultInputFiler1);
     };
     ButtonGroupListener liBase2 = id -> {
+      clearsStates();
       mBaseHex2 = id == R.id.btBaseHex2;
       updateText(mBaseHex2, mTextValue2, mGlobalValue1);
       changeInputType(mBaseHex2, mTextValue2, defaultInputFiler2);
     };
     ButtonGroupListener liOperation = id -> {
+      clearsStates();
       if (R.id.btAnd == id)
         mOperation = Operation.AND;
       else if (R.id.btAndNot == id)
@@ -141,8 +134,41 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
     mTextValue1.setText("");
     mTextValue2.setText("");
     mTextValue1.addTextChangedListener(this);
+    mTextValue1.setOnEditorActionListener(this);
     mTextValue2.addTextChangedListener(this);
+    mTextValue2.setOnEditorActionListener(this);
     evaluateOperation(); /* force refresh */
+  }
+
+  /**
+   * Clears the texts focus and hide the keyboad.
+   */
+  private void clearsStates() {
+    UiHelper.hideKeyboard(this);
+    mTextValue1.clearFocus();
+    mTextValue2.clearFocus();
+  }
+
+
+  /**
+   * Called when an action is being performed.
+   *
+   * @param v        The view that was clicked.
+   * @param actionId Identifier of the action.  This will be either the
+   *                 identifier you supplied, or {@link EditorInfo#IME_NULL
+   *                 EditorInfo.IME_NULL} if being called due to the enter key
+   *                 being pressed.
+   * @param event    If triggered by an enter key, this is the event;
+   *                 otherwise, this is null.
+   * @return Return true if you have consumed the action, else false.
+   */
+  @Override
+  public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    if (EditorInfo.IME_ACTION_DONE == actionId) {
+      clearsStates();
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -155,7 +181,7 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
   public boolean onOptionsItemSelected(MenuItem item) {
     if (android.R.id.home == item.getItemId()) {
       setResult(RESULT_CANCELED);
-      hideKeyboard();
+      UiHelper.hideKeyboard(this);
       finish();
       return true;
     }
@@ -163,30 +189,13 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
   }
 
   /**
-   * Hides the keyboard.
-   */
-  private void hideKeyboard() {
-    /* hide keyboard */
-    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    if (imm.isAcceptingText()) {
-      //Find the currently focused view, so we can grab the correct window token from it.
-      View view = getCurrentFocus();
-      //If no view currently has focus, create a new one, just so we can grab a window token from it
-      if (null == view) {
-        view = new View(this);
-      }
-      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-  }
-
-  /**
    * Sets the text according to the converted value.
    *
    * @param hex    The base.
-   * @param output TextInputEditText
+   * @param output AppCompatEditText
    * @param bits   The associated bits.
    */
-  private void updateText(boolean hex, TextInputEditText output, Bits bits) {
+  private void updateText(boolean hex, AppCompatEditText output, Bits bits) {
     String text = Objects.requireNonNull(output.getText()).toString();
     if (text.isEmpty())
       return;
@@ -206,9 +215,9 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
    * @param textValue         The input to reconfigure.
    * @param defaultInputFiler The DefaultInputFiler
    */
-  private void changeInputType(boolean hex, TextInputEditText textValue, InputFilter[] defaultInputFiler) {
+  private void changeInputType(boolean hex, AppCompatEditText textValue, InputFilter[] defaultInputFiler) {
     if (hex) {
-      textValue.setFilters(new InputFilter[]{mInputFilterTextHex});
+      textValue.setFilters(new InputFilter[]{UiHelper.getInputFilterTextHex()});
       textValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     } else {
       textValue.setFilters(defaultInputFiler);
@@ -275,7 +284,7 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher {
    * @param hex      The base.
    * @param bits     The loaded bits.
    */
-  private void loadBitsValue(TextInputEditText editText, boolean hex, Bits bits) {
+  private void loadBitsValue(AppCompatEditText editText, boolean hex, Bits bits) {
     String text = Objects.requireNonNull(editText.getText()).toString();
     if (text.isEmpty())
       bits.setValue("0", Radix.DEC);

@@ -21,7 +21,7 @@
       android:id="@+id/llBin"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"></LinearLayout>
+      android:orientation="vertical" />
 
     <RelativeLayout
       android:id="@+id/llShifts"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/activity_more"
   android:layout_width="match_parent"
@@ -14,33 +15,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/tilValue1"
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/labelValue1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentTop="true">
+      android:layout_alignParentTop="true"
+      android:text="@string/value1" />
 
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/tietValue1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:digits="0123456789"
-        android:fontFamily="monospace"
-        android:hint="@string/value1"
-        android:inputType="number"
-        android:maxLength="20"
-        android:maxLines="1"
-        android:minHeight="@dimen/touch_target_size"
-        android:imeOptions="actionNext"
-        tools:ignore="VisualLintTextFieldSize" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <androidx.appcompat.widget.AppCompatEditText
+      android:id="@+id/etValue1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/labelValue1"
+      android:digits="0123456789"
+      android:fontFamily="monospace"
+      android:hint="@string/empty"
+      android:imeOptions="actionNext"
+      android:inputType="number"
+      android:maxLength="20"
+      android:maxLines="1"
+      android:minHeight="@dimen/touch_target_size"
+      tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck" />
 
     <LinearLayout
       android:id="@+id/btGroupBase1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/tilValue1"
+      android:layout_below="@id/etValue1"
       android:gravity="center_horizontal">
 
       <androidx.appcompat.widget.AppCompatButton
@@ -60,32 +61,32 @@
         tools:ignore="DuplicateSpeakableTextCheck" />
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/tilValue2"
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/labelValue2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/btGroupBase1">
+      android:layout_below="@id/btGroupBase1"
+      android:text="@string/value2" />
 
-      <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/tietValue2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:digits="0123456789"
-        android:fontFamily="monospace"
-        android:hint="@string/value2"
-        android:inputType="number"
-        android:maxLength="20"
-        android:maxLines="1"
-        android:minHeight="@dimen/touch_target_size"
-        android:imeOptions="actionDone"
-        tools:ignore="VisualLintTextFieldSize" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <androidx.appcompat.widget.AppCompatEditText
+      android:id="@+id/etValue2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/labelValue2"
+      android:digits="0123456789"
+      android:fontFamily="monospace"
+      android:imeOptions="actionDone"
+      android:inputType="number"
+      android:maxLength="20"
+      android:maxLines="1"
+      android:minHeight="@dimen/touch_target_size"
+      tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck" />
 
     <LinearLayout
       android:id="@+id/btGroupBase2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/tilValue2"
+      android:layout_below="@id/etValue2"
       android:gravity="center_horizontal">
 
       <androidx.appcompat.widget.AppCompatButton
@@ -112,12 +113,16 @@
       android:gravity="center_vertical"
       android:text="@string/operation" />
 
-    <LinearLayout
-      android:id="@+id/btGroupOperations1"
+    <com.google.android.flexbox.FlexboxLayout
+      android:id="@+id/btGroupOperations"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@id/tvOperation"
-      android:gravity="center_horizontal">
+      android:gravity="center_horizontal"
+      app:flexDirection="row"
+      app:flexWrap="wrap"
+      app:justifyContent="center">
+
 
       <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btAnd"
@@ -142,14 +147,6 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/buttons_margin"
         android:text="@string/not" />
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/btGroupOperations2"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@id/btGroupOperations1"
-      android:gravity="center_horizontal">
 
       <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btOr"
@@ -166,13 +163,14 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/buttons_margin"
         android:text="@string/xor" />
-    </LinearLayout>
+
+    </com.google.android.flexbox.FlexboxLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
       android:id="@+id/tvResultLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_below="@id/btGroupOperations2"
+      android:layout_below="@id/btGroupOperations"
       android:fontFamily="monospace"
       android:text="@string/result" />
 

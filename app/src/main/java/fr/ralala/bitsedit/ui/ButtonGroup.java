@@ -1,5 +1,6 @@
 package fr.ralala.bitsedit.ui;
 
+import android.graphics.Color;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -28,6 +29,8 @@ import fr.ralala.bitsedit.R;
 public class ButtonGroup implements View.OnClickListener {
   private final @ColorInt int mBackgroundFocus;
   private final @ColorInt int mBackgroundUnFocus;
+  private final @ColorInt int mForegroundFocus;
+  private final @ColorInt int mForegroundUnFocus;
 
   private final List<AppCompatButton> mButtons = new ArrayList<>();
   private AppCompatButton mBtUnFocus;
@@ -38,11 +41,26 @@ public class ButtonGroup implements View.OnClickListener {
     void onButtonClick(@IdRes int id);
   }
 
+  /**
+   * Checking if title text color will be black
+   *
+   * @return boolean
+   */
+  private boolean isLightColor(@ColorInt int color) {
+    int rgb = (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
+    return rgb > 210;
+  }
+
   ButtonGroup(AppCompatActivity activity, List<Integer> ids, ButtonGroupListener listener) {
     mIds = ids;
     mListener = listener;
-    mBackgroundFocus = ContextCompat.getColor(activity, R.color.colorAccent);
+    mBackgroundFocus = UiHelper.getSystemAccentColor(activity);
+    if (isLightColor(mBackgroundFocus))
+      mForegroundFocus = ContextCompat.getColor(activity, R.color.colorPrimaryDark);
+    else
+      mForegroundFocus = ContextCompat.getColor(activity, R.color.textColor);
     mBackgroundUnFocus = ContextCompat.getColor(activity, R.color.colorButtonNormal);
+    mForegroundUnFocus = ContextCompat.getColor(activity, R.color.textColor);
     for (Integer id : mIds) {
       AppCompatButton bt = (AppCompatButton) activity.findViewById(id);
       bt.setBackgroundColor(mBackgroundUnFocus);
@@ -77,7 +95,9 @@ public class ButtonGroup implements View.OnClickListener {
    */
   private void setFocus(AppCompatButton unFocus, AppCompatButton focus) {
     unFocus.setBackgroundColor(mBackgroundUnFocus);
+    unFocus.setTextColor(mForegroundUnFocus);
     focus.setBackgroundColor(mBackgroundFocus);
+    focus.setTextColor(mForegroundFocus);
     mBtUnFocus = focus;
   }
 }
