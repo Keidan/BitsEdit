@@ -3,6 +3,7 @@ package fr.ralala.bitsedit.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.view.ViewCompat;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -77,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       mEtDec.setOnEditorActionListener(this);
       mEtHex.setOnEditorActionListener(this);
       actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+      ColorStateList csl = ColorStateList.valueOf(mApp.getAppColors().getAccentColor());
+      ViewCompat.setBackgroundTintList(mEtDec, csl);
+      ViewCompat.setBackgroundTintList(mEtHex, csl);
     }
 
     installShift(findViewById(R.id.btShiftLeft), true);
@@ -153,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       llBinContent.setLayoutParams(llp);
       if (0 == (i % 2)) {
         llBinContent.setBackgroundColor(mApp.getAppColors().getGrayColor(this));
+        llBinContent.setElevation(getResources().getDimensionPixelSize(R.dimen.title_elevation));
         for (int j = 7; j >= 0; --j, --lbl) {
           AppCompatTextView tv = createTextView(true);
           tv.setId(-(id + 1));

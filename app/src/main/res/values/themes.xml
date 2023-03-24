@@ -7,6 +7,8 @@
     <item name="android:windowBackground">@color/system_neutral1_50</item>
     <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     <item name="android:colorButtonNormal">@color/button_light</item>
+    <item name="android:colorAccent">@color/button_light</item>
+    <item name="colorAccent">@color/button_light</item>
   </style>
   <style name="WindowAnimationTransition">
     <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
