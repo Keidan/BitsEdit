@@ -16,8 +16,8 @@ android {
         applicationId "fr.ralala.bitsedit"
         minSdk 28
         targetSdk 33
-        versionCode 107
-        versionName "1.7"
+        versionCode 108
+        versionName "1.8"
         signingConfig signingConfigs.config
     }
     buildTypes {
