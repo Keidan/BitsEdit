@@ -1,6 +1,6 @@
-package fr.ralala.bitsedit.ui;
+package fr.ralala.bitsedit.ui.utils;
 
-import android.graphics.Color;
+import android.content.res.ColorStateList;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ralala.bitsedit.ApplicationCtx;
 import fr.ralala.bitsedit.R;
 
 /**
@@ -27,8 +28,8 @@ import fr.ralala.bitsedit.R;
  * ******************************************************************************
  */
 public class ButtonGroup implements View.OnClickListener {
-  private final @ColorInt int mBackgroundFocus;
-  private final @ColorInt int mBackgroundUnFocus;
+  private final ColorStateList mBackgroundFocus;
+  private final ColorStateList mBackgroundUnFocus;
   private final @ColorInt int mForegroundFocus;
   private final @ColorInt int mForegroundUnFocus;
 
@@ -37,37 +38,36 @@ public class ButtonGroup implements View.OnClickListener {
   private final List<Integer> mIds;
   private final ButtonGroupListener mListener;
 
-  interface ButtonGroupListener {
+  public interface ButtonGroupListener {
     void onButtonClick(@IdRes int id);
   }
 
-  /**
-   * Checking if title text color will be black
-   *
-   * @return boolean
-   */
-  private boolean isLightColor(@ColorInt int color) {
-    int rgb = (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
-    return rgb > 210;
-  }
-
-  ButtonGroup(AppCompatActivity activity, List<Integer> ids, ButtonGroupListener listener) {
+  public ButtonGroup(AppCompatActivity activity, List<Integer> ids, ButtonGroupListener listener) {
     mIds = ids;
     mListener = listener;
-    mBackgroundFocus = UiHelper.getSystemAccentColor(activity);
-    if (isLightColor(mBackgroundFocus))
-      mForegroundFocus = ContextCompat.getColor(activity, R.color.colorPrimaryDark);
+    ApplicationCtx app = (ApplicationCtx) activity.getApplication();
+    if (UiHelper.isLightColor(app.getAppColors().getAccentColor()))
+      mForegroundFocus = ContextCompat.getColor(activity, R.color.system_neutral1_900);
     else
-      mForegroundFocus = ContextCompat.getColor(activity, R.color.textColor);
-    mBackgroundUnFocus = ContextCompat.getColor(activity, R.color.colorButtonNormal);
-    mForegroundUnFocus = ContextCompat.getColor(activity, R.color.textColor);
+      mForegroundFocus = ContextCompat.getColor(activity, R.color.system_neutral1_50);
+    mForegroundUnFocus = app.getAppColors().getTextColor();
     for (Integer id : mIds) {
       AppCompatButton bt = (AppCompatButton) activity.findViewById(id);
-      bt.setBackgroundColor(mBackgroundUnFocus);
       bt.setOnClickListener(this);
       mButtons.add(bt);
     }
+
+    mBackgroundUnFocus = getColorStateList(app.getAppColors().getButtonBackgroundColor());
+    mBackgroundFocus = getColorStateList(app.getAppColors().getAccentColor());
     setFocus(mButtons.get(0), mButtons.get(0));
+  }
+
+  private ColorStateList getColorStateList(int background) {
+    return new ColorStateList(new int[][]{
+        new int[]{}
+    }, new int[]{
+        background
+    });
   }
 
   /**
@@ -94,10 +94,11 @@ public class ButtonGroup implements View.OnClickListener {
    * @param focus   Focused button.
    */
   private void setFocus(AppCompatButton unFocus, AppCompatButton focus) {
-    unFocus.setBackgroundColor(mBackgroundUnFocus);
+    unFocus.setBackgroundTintList(mBackgroundUnFocus);
     unFocus.setTextColor(mForegroundUnFocus);
-    focus.setBackgroundColor(mBackgroundFocus);
+    focus.setBackgroundTintList(mBackgroundFocus);
     focus.setTextColor(mForegroundFocus);
     mBtUnFocus = focus;
   }
+
 }

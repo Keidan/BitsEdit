@@ -1,5 +1,7 @@
 package fr.ralala.bitsedit.ui;
 
+import static fr.ralala.bitsedit.ui.utils.ButtonGroup.ButtonGroupListener;
+
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,7 +12,9 @@ import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -23,9 +27,9 @@ import androidx.core.view.ViewCompat;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static fr.ralala.bitsedit.ui.ButtonGroup.ButtonGroupListener;
-
 import fr.ralala.bitsedit.R;
+import fr.ralala.bitsedit.ui.utils.ButtonGroup;
+import fr.ralala.bitsedit.ui.utils.UiHelper;
 import fr.ralala.bitsedit.utils.Bits;
 import fr.ralala.bitsedit.utils.Operation;
 import fr.ralala.bitsedit.utils.Radix;
@@ -43,17 +47,30 @@ import fr.ralala.bitsedit.utils.Radix;
  * ******************************************************************************
  */
 public class MoreActivity extends AppCompatActivity implements TextWatcher, TextView.OnEditorActionListener {
-  private static final String COLON = ":";
   private static final String SP = " ";
-  private static final String NL = "\n";
-  private static final String PADDING = "  ";
-  private String mTextBase10 = "";
-  private String mTextBase16 = "";
-  private final Bits mGlobalValue1 = new Bits();
-  private final Bits mGlobalValue2 = new Bits();
+  private final Bits mBits1 = new Bits();
+  private final Bits mBits2 = new Bits();
   private AppCompatEditText mTextValue1;
   private AppCompatEditText mTextValue2;
-  private AppCompatTextView mTvResult;
+  private TableLayout mTlCommon;
+  private AppCompatTextView mTableCommonTvColValue1;
+  private AppCompatTextView mTableCommonTvColSymbol;
+  private AppCompatTextView mTableCommonTvColValue2;
+  private AppCompatTextView mTableCommonTvColDashes;
+  private AppCompatTextView mTableCommonTvColResult;
+  private AppCompatTextView mTableCommonTvColBase10;
+  private AppCompatTextView mTableCommonTvColBase16;
+  private TableLayout mTlNot;
+  private AppCompatTextView mTableNotTvColValue1;
+  private AppCompatTextView mTableNotTvColDashesValue1;
+  private AppCompatTextView mTableNotTvColResultValue1;
+  private AppCompatTextView mTableNotTvColBase10Value1;
+  private AppCompatTextView mTableNotTvColBase16Value1;
+  private AppCompatTextView mTableNotTvColValue2;
+  private AppCompatTextView mTableNotTvColDashesValue2;
+  private AppCompatTextView mTableNotTvColResultValue2;
+  private AppCompatTextView mTableNotTvColBase10Value2;
+  private AppCompatTextView mTableNotTvColBase16Value2;
   private boolean mIgnore = false;
   private boolean mBaseHex1 = false;
   private boolean mBaseHex2 = false;
@@ -75,12 +92,27 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher, Text
       actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    mTextBase10 = getString(R.string.base10);
-    mTextBase16 = getString(R.string.base16);
-
     mTextValue1 = findViewById(R.id.etValue1);
     mTextValue2 = findViewById(R.id.etValue2);
-    mTvResult = findViewById(R.id.tvResult);
+    mTlCommon = findViewById(R.id.tlCommon);
+    mTlNot = findViewById(R.id.tlNot);
+    mTableCommonTvColValue1 = findViewById(R.id.tableCommonTvColValue1);
+    mTableCommonTvColSymbol = findViewById(R.id.tableCommonTvColSymbol);
+    mTableCommonTvColValue2 = findViewById(R.id.tableCommonTvColValue2);
+    mTableCommonTvColDashes = findViewById(R.id.tableCommonTvColDashes);
+    mTableCommonTvColResult = findViewById(R.id.tableCommonTvColResult);
+    mTableCommonTvColBase16 = findViewById(R.id.tableCommonTvColBase16);
+    mTableCommonTvColBase10 = findViewById(R.id.tableCommonTvColBase10);
+    mTableNotTvColValue1 = findViewById(R.id.tableNotTvColValue1);
+    mTableNotTvColDashesValue1 = findViewById(R.id.tableNotTvColDashesValue1);
+    mTableNotTvColResultValue1 = findViewById(R.id.tableNotTvColResultValue1);
+    mTableNotTvColBase10Value1 = findViewById(R.id.tableNotTvColBase10Value1);
+    mTableNotTvColBase16Value1 = findViewById(R.id.tableNotTvColBase16Value1);
+    mTableNotTvColValue2 = findViewById(R.id.tableNotTvColValue2);
+    mTableNotTvColDashesValue2 = findViewById(R.id.tableNotTvColDashesValue2);
+    mTableNotTvColResultValue2 = findViewById(R.id.tableNotTvColResultValue2);
+    mTableNotTvColBase10Value2 = findViewById(R.id.tableNotTvColBase10Value2);
+    mTableNotTvColBase16Value2 = findViewById(R.id.tableNotTvColBase16Value2);
 
     @ColorInt int accent = UiHelper.getSystemAccentColor(this);
     ColorStateList csl = ColorStateList.valueOf(accent);
@@ -94,13 +126,13 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher, Text
     ButtonGroupListener liBase1 = id -> {
       clearsStates();
       mBaseHex1 = id == R.id.btBaseHex1;
-      updateText(mBaseHex1, mTextValue1, mGlobalValue1);
+      updateText(mBaseHex1, mTextValue1, mBits1);
       changeInputType(mBaseHex1, mTextValue1, defaultInputFiler1);
     };
     ButtonGroupListener liBase2 = id -> {
       clearsStates();
       mBaseHex2 = id == R.id.btBaseHex2;
-      updateText(mBaseHex2, mTextValue2, mGlobalValue1);
+      updateText(mBaseHex2, mTextValue2, mBits1);
       changeInputType(mBaseHex2, mTextValue2, defaultInputFiler2);
     };
     ButtonGroupListener liOperation = id -> {
@@ -306,53 +338,38 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher, Text
   }
 
   /**
-   * Adds the values base10 & base16.
-   *
-   * @param sb   The working string.
-   * @param bits The reference bits.
-   */
-  private void addBases(StringBuilder sb, Bits bits) {
-    sb.append(mTextBase10);
-    sb.append(COLON).append(SP);
-    sb.append(bits.getDecValue());
-    sb.append(NL);
-    sb.append(mTextBase16);
-    sb.append(COLON).append(SP);
-    sb.append(bits.getHexValue());
-    sb.append(NL);
-  }
-
-  /**
    * Formats the result of the NOT operations on the two reference values.
-   *
-   * @return The formatted string.
    */
-  private String formatNOT() {
+  private void formatNOT() {
+    mTlNot.setVisibility(View.VISIBLE);
+    mTlCommon.setVisibility(View.GONE);
     final Operation op = Operation.NOT;
-    Bits bits1 = mGlobalValue1.not();
-    Bits bits2 = mGlobalValue2.not();
-    int max = Math.max(mGlobalValue1.getBitLength(),
-        Math.max(mGlobalValue2.getBitLength(),
-            Math.max(bits1.getBitLength(), bits2.getBitLength())));
-    int maxDashes = evalDashesMax(max, op);
-    StringBuilder sb = new StringBuilder();
-    sb.append(PADDING).append(PADDING).append(PADDING);
-    sb.append(op.getSymbol()).append(mGlobalValue1.toBinary(max));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    sb.append(getDashes(maxDashes));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    sb.append(SP).append(bits1.toBinary(max)).append(NL);
-    addBases(sb, bits1);
-    sb.append(NL);
-    sb.append(PADDING).append(PADDING).append(PADDING);
-    sb.append(op.getSymbol()).append(mGlobalValue2.toBinary(max));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    sb.append(getDashes(maxDashes));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    sb.append(SP).append(bits2.toBinary(max)).append(NL).append(NL);
-    addBases(sb, bits2);
-    sb.append(NL);
-    return sb.toString();
+    Bits bits1 = mBits1.not();
+    Bits bits2 = mBits2.not();
+    int max1 = Math.max(mBits1.getBitLength(), bits1.getBitLength());
+    int max2 = Math.max(mBits2.getBitLength(), bits2.getBitLength());
+    int maxDashes1 = evalDashesMax(max1, op);
+    int maxDashes2 = evalDashesMax(max2, op);
+
+    String temp = getSpace(op) + mBits1.toBinary(max1);
+    mTableNotTvColValue1.setText(temp);
+    mTableNotTvColDashesValue1.setText(getDashes(maxDashes1));
+    temp = getSpace(op) + bits1.toBinary(max1);
+    mTableNotTvColResultValue1.setText(temp);
+    temp = getSpace(op) + bits1.getDecValue();
+    mTableNotTvColBase10Value1.setText(temp);
+    temp = getSpace(op) + bits1.getHexValue();
+    mTableNotTvColBase16Value1.setText(temp);
+
+    temp = getSpace(op) + mBits2.toBinary(max2);
+    mTableNotTvColValue2.setText(temp);
+    mTableNotTvColDashesValue2.setText(getDashes(maxDashes2));
+    temp = getSpace(op) + bits2.toBinary(max2);
+    mTableNotTvColResultValue2.setText(temp);
+    temp = getSpace(op) + bits2.getDecValue();
+    mTableNotTvColBase10Value2.setText(temp);
+    temp = getSpace(op) + bits2.getHexValue();
+    mTableNotTvColBase16Value2.setText(temp);
   }
 
   /**
@@ -372,61 +389,70 @@ public class MoreActivity extends AppCompatActivity implements TextWatcher, Text
     return maxDashes;
   }
 
+  private String getSpace(Operation op) {
+    String temp = "";
+    if (op.hasSubSymbol())
+      temp += SP;
+    return temp;
+  }
+
   /**
    * Formats the result of the AND/NOT AND/OR/XOR operations on the specified values.
    *
    * @param bits The calculated value.
    * @param op   The operation.
-   * @return The formatted string.
    */
-  private String formatOperation(Bits bits, Operation op) {
-    int max = Math.max(mGlobalValue1.getBitLength(),
-        Math.max(mGlobalValue2.getBitLength(), bits.getBitLength()));
+  private void formatOperation(Bits bits, Operation op) {
+    mTlNot.setVisibility(View.GONE);
+    mTlCommon.setVisibility(View.VISIBLE);
+    int max = Math.max(mBits1.getBitLength(),
+        Math.max(mBits2.getBitLength(), bits.getBitLength()));
     int maxDashes = evalDashesMax(max, op);
-    StringBuilder sb = new StringBuilder();
-    sb.append(PADDING).append(PADDING).append(PADDING);
+    String temp = getSpace(op) + mBits1.toBinary(max);
+    mTableCommonTvColValue1.setText(temp);
+    mTableCommonTvColSymbol.setText(op.getSymbol());
+    temp = "";
     if (op.hasSubSymbol())
-      sb.append(SP);
-
-    sb.append(mGlobalValue1.toBinary(max));
-    sb.append(NL).append(PADDING);
-    sb.append(op.getSymbol());
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    if (op.hasSubSymbol())
-      sb.append(op.getSubSymbol());
-    sb.append(mGlobalValue2.toBinary(max));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    sb.append(getDashes(maxDashes));
-    sb.append(NL).append(PADDING).append(PADDING).append(PADDING);
-    if (op.hasSubSymbol())
-      sb.append(SP);
-    sb.append(bits.toBinary(max)).append(NL).append(NL);
-    addBases(sb, bits);
-    return sb.toString();
+      temp += op.getSubSymbol();
+    temp += mBits2.toBinary(max);
+    mTableCommonTvColValue2.setText(temp);
+    mTableCommonTvColDashes.setText(getDashes(maxDashes));
+    temp = getSpace(op) + bits.toBinary(max);
+    mTableCommonTvColResult.setText(temp);
+    temp = getSpace(op) + bits.getDecValue();
+    mTableCommonTvColBase10.setText(temp);
+    temp = getSpace(op) + bits.getHexValue();
+    mTableCommonTvColBase16.setText(temp);
   }
 
   private void evaluateOperation() {
-    loadBitsValue(mTextValue1, mBaseHex1, mGlobalValue1);
-    loadBitsValue(mTextValue2, mBaseHex2, mGlobalValue2);
-
+    loadBitsValue(mTextValue1, mBaseHex1, mBits1);
+    loadBitsValue(mTextValue2, mBaseHex2, mBits2);
+    mTableCommonTvColValue1.setText("");
+    mTableCommonTvColSymbol.setText("");
+    mTableCommonTvColValue2.setText("");
+    mTableCommonTvColDashes.setText("");
+    mTableCommonTvColResult.setText("");
+    mTableCommonTvColBase10.setText("");
+    mTableCommonTvColBase16.setText("");
     if (null == mOperation)
-      mTvResult.setText(getString(R.string.error));
+      mTableCommonTvColValue1.setText(getString(R.string.error));
     else {
       switch (mOperation) {
         case NOT:
-          mTvResult.setText(formatNOT());
+          formatNOT();
           break;
         case AND:
-          mTvResult.setText(formatOperation(mGlobalValue1.and(mGlobalValue2), mOperation));
+          formatOperation(mBits1.and(mBits2), mOperation);
           break;
         case AND_NOT:
-          mTvResult.setText(formatOperation(mGlobalValue1.andNot(mGlobalValue2), mOperation));
+          formatOperation(mBits1.andNot(mBits2), mOperation);
           break;
         case OR:
-          mTvResult.setText(formatOperation(mGlobalValue1.or(mGlobalValue2), mOperation));
+          formatOperation(mBits1.or(mBits2), mOperation);
           break;
         case XOR:
-          mTvResult.setText(formatOperation(mGlobalValue1.xor(mGlobalValue2), mOperation));
+          formatOperation(mBits1.xor(mBits2), mOperation);
           break;
       }
     }

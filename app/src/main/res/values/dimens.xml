@@ -7,4 +7,13 @@
 
   <dimen name="buttons_margin">5dp</dimen>
 
+  <dimen name="column_margin_end">15dp</dimen>
+  <dimen name="column_base1_margin_top">15dp</dimen>
+  <dimen name="label_result_top">10dp</dimen>
+  <dimen name="label_result_bottom">10dp</dimen>
+
+  <dimen name="button_padding_horizontal_material">8dp</dimen>
+  <dimen name="button_padding_vertical_material">4dp</dimen>
+  <dimen name="button_inset_vertical_material">6dp</dimen>
+  <dimen name="button_inset_horizontal_material">4dp</dimen>
 </resources>

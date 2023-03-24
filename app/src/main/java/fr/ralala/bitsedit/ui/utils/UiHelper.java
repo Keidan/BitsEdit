@@ -1,6 +1,8 @@
-package fr.ralala.bitsedit.ui;
+package fr.ralala.bitsedit.ui.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.View;
@@ -51,7 +53,7 @@ public class UiHelper {
    *
    * @return InputFilter
    */
-  static InputFilter getInputFilterTextHex() {
+  public static InputFilter getInputFilterTextHex() {
     return mInputFilterTextHex;
   }
 
@@ -60,7 +62,7 @@ public class UiHelper {
    *
    * @param activity The activity.
    */
-  static void hideKeyboard(AppCompatActivity activity) {
+  public static void hideKeyboard(AppCompatActivity activity) {
     /* hide keyboard */
     InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
     if (imm.isAcceptingText()) {
@@ -77,16 +79,36 @@ public class UiHelper {
   /**
    * Returns the system accent color.
    *
-   * @param activity The activity.
+   * @param context The Android context.
    * @return color
    */
-  static @ColorInt int getSystemAccentColor(AppCompatActivity activity) {
+  public static @ColorInt int getSystemAccentColor(Context context) {
     TypedValue typedValue = new TypedValue();
-    ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(activity,
+    ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
         android.R.style.Theme_DeviceDefault);
     contextThemeWrapper.getTheme().resolveAttribute(android.R.attr.colorAccent,
         typedValue, true);
     return typedValue.data;
   }
 
+  /**
+   * Checking if title text color will be black
+   *
+   * @return boolean
+   */
+  public static boolean isLightColor(@ColorInt int color) {
+    int rgb = (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
+    return rgb > 170;
+  }
+
+  /**
+   * Tests if the night mode is activated or not
+   *
+   * @param context The Android context.
+   * @return boolean
+   */
+  public static boolean isNightMode(Context context) {
+    int nmFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+    return nmFlags == Configuration.UI_MODE_NIGHT_YES;
+  }
 }

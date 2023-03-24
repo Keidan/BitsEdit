@@ -172,15 +172,240 @@
       android:layout_height="wrap_content"
       android:layout_below="@id/btGroupOperations"
       android:fontFamily="monospace"
-      android:text="@string/result" />
+      android:text="@string/result"
+      android:layout_marginTop="@dimen/label_result_top"
+      android:layout_marginBottom="@dimen/label_result_bottom"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-      android:id="@+id/tvResult"
-      android:layout_width="wrap_content"
+    <TableLayout
+      android:id="@+id/tlCommon"
+      android:visibility="gone"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/tvResultLabel"
       android:layout_alignParentStart="true"
-      android:fontFamily="monospace"
-      android:text="@null" />
+      android:layout_below="@id/tvResultLabel">
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/value1"
+          android:layout_marginEnd="@dimen/column_margin_end"/>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColValue1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColSymbol"
+          android:gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/value2"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColValue2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColDashes"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColResult"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base10_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:id="@+id/tableCommonTvColBase10"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base16_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableCommonTvColBase16"
+          android:layout_span="2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+    </TableLayout>
+    <TableLayout
+      android:id="@+id/tlNot"
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_below="@id/tvResultLabel">
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/value1"
+          android:layout_marginEnd="@dimen/column_margin_end"/>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColValue1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColDashesValue1"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColResultValue1"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base10_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:id="@+id/tableNotTvColBase10Value1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base16_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColBase16Value1"
+          android:layout_span="2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/value2"
+          android:layout_marginEnd="@dimen/column_margin_end"/>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:id="@+id/tableNotTvColValue2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColDashesValue2"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColResultValue2"
+          android:layout_column="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base10_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_marginTop="@dimen/column_base1_margin_top"
+          android:id="@+id/tableNotTvColBase10Value2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+      <TableRow>
+        <androidx.appcompat.widget.AppCompatTextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@string/base16_colon"
+          android:layout_marginEnd="@dimen/column_margin_end" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/tableNotTvColBase16Value2"
+          android:layout_span="2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="monospace"
+          android:text="@null" />
+      </TableRow>
+    </TableLayout>
   </RelativeLayout>
 </ScrollView>

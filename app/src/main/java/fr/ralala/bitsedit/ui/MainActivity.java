@@ -3,7 +3,6 @@ package fr.ralala.bitsedit.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,18 +19,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Locale;
-import java.util.Objects;
-
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 
+import java.util.Locale;
+import java.util.Objects;
+
+import fr.ralala.bitsedit.ApplicationCtx;
 import fr.ralala.bitsedit.R;
+import fr.ralala.bitsedit.ui.utils.UiHelper;
 import fr.ralala.bitsedit.utils.Bits;
 import fr.ralala.bitsedit.utils.Radix;
 
@@ -50,12 +48,11 @@ import fr.ralala.bitsedit.utils.Radix;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
   private String mDotString = null;
   private String mOneString = null;
-  private final Bits mGlobalValue = new Bits();
   private final SparseArray<AppCompatTextView> mGrid = new SparseArray<>();
   private AppCompatEditText mEtDec = null;
   private AppCompatEditText mEtHex = null;
-  private @ColorInt int mColorDot;
-  private @ColorInt int mColorOne;
+
+  private ApplicationCtx mApp;
 
   /**
    * Called when the activity is created.
@@ -66,11 +63,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    @ColorInt int accent = UiHelper.getSystemAccentColor(this);
+    mApp = (ApplicationCtx) getApplication();
+    mApp.getAppColors().load(this);
     mDotString = getString(R.string.dot);
     mOneString = getString(R.string.one);
-    mColorOne = accent;
-    mColorDot = ContextCompat.getColor(this, R.color.textColor);
 
     ActionBar actionBar = getDelegate().getSupportActionBar();
     // add the custom view to the action bar
@@ -81,10 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       mEtDec.setOnEditorActionListener(this);
       mEtHex.setOnEditorActionListener(this);
       actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
-
-      ColorStateList csl = ColorStateList.valueOf(accent);
-      ViewCompat.setBackgroundTintList(mEtDec, csl);
-      ViewCompat.setBackgroundTintList(mEtHex, csl);
     }
 
     installShift(findViewById(R.id.btShiftLeft), true);
@@ -110,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void run() {
           if (left)
-            mGlobalValue.shiftLeft();
+            mApp.getBits().shiftLeft();
           else
-            mGlobalValue.shiftRight();
+            mApp.getBits().shiftRight();
           refreshBits();
           setTexts();
           clearsFocus();
@@ -160,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           ViewGroup.LayoutParams.WRAP_CONTENT);
       llBinContent.setLayoutParams(llp);
       if (0 == (i % 2)) {
-        llBinContent.setBackgroundColor(getColor(R.color.colorBackground));
+        llBinContent.setBackgroundColor(mApp.getAppColors().getGrayColor(this));
         for (int j = 7; j >= 0; --j, --lbl) {
           AppCompatTextView tv = createTextView(true);
           tv.setId(-(id + 1));
@@ -171,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       } else {
         for (int j = 7; j >= 0; --j, --id) {
           AppCompatTextView tv = createTextView(false);
-          setText(tv, mDotString);
+          tv.setText(mDotString);
           tv.setId(id);
           tv.setMinHeight(px);
           tv.setOnClickListener(this);
@@ -190,8 +182,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   public void onResume() {
     super.onResume();
+    mApp.getAppColors().load(this);
     Bits bits = new Bits();
-    bits.setValue(mGlobalValue.getDecValue(), Radix.DEC);
+    bits.setValue(mApp.getBits().getDecValue(), Radix.DEC);
     refreshBits();
   }
 
@@ -201,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private void refreshBits() {
     for (int i = 0; i < mGrid.size(); ++i) {
       AppCompatTextView tv = mGrid.get(i);
-      setText(tv, mGlobalValue.isNotBit(i) ? mDotString : mOneString);
+      tv.setText(mApp.getBits().isNotBit(i) ? mDotString : mOneString);
     }
   }
 
@@ -235,32 +228,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     UiHelper.hideKeyboard(this);
     AppCompatTextView tv = (AppCompatTextView) v;
     boolean value = tv.getText().toString().equals(mOneString);
-    setText(tv, !value ? mOneString : mDotString);
-    mGlobalValue.setBit(v.getId(), !value);
+    tv.setText(!value ? mOneString : mDotString);
+    mApp.getBits().setBit(v.getId(), !value);
     setTexts();
     clearsFocus();
-  }
-
-  /**
-   * This function changes the text of an AppCompatTextView and also changes the color depending on the input
-   *
-   * @param tv   The view.
-   * @param text The text
-   */
-  private void setText(AppCompatTextView tv, String text) {
-    if (text.equals(mOneString))
-      tv.setTextColor(mColorOne);
-    else
-      tv.setTextColor(mColorDot);
-    tv.setText(text);
   }
 
   /**
    * Sets texts.
    */
   private void setTexts() {
-    mEtDec.setText(mGlobalValue.getDecValue());
-    mEtHex.setText(mGlobalValue.getHexValue());
+    mEtDec.setText(mApp.getBits().getDecValue());
+    mEtHex.setText(mApp.getBits().getHexValue());
   }
 
   /**
@@ -288,13 +267,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     if (EditorInfo.IME_ACTION_DONE == actionId) {
       AppCompatEditText et = (AppCompatEditText) v;
       Radix base = et.equals(mEtDec) ? Radix.DEC : Radix.HEX;
-      mGlobalValue.setValue(Objects.requireNonNull(et.getText()).toString(), base);
+      mApp.getBits().setValue(Objects.requireNonNull(et.getText()).toString(), base);
       for (int i = 0; i < mGrid.size(); ++i) {
         AppCompatTextView tv = mGrid.get(i);
-        setText(tv, mGlobalValue.isNotBit(i) ? mDotString : mOneString);
+        tv.setText(mApp.getBits().isNotBit(i) ? mDotString : mOneString);
       }
       AppCompatEditText other = et.equals(mEtDec) ? mEtHex : mEtDec;
-      other.setText(mGlobalValue.getValueFromBase(base == Radix.DEC ? Radix.HEX : Radix.DEC));
+      other.setText(mApp.getBits().getValueFromBase(base == Radix.DEC ? Radix.HEX : Radix.DEC));
       clearsFocus();
       InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       if (null != in)

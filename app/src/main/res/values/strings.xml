@@ -4,6 +4,8 @@
   <string name="b16">16:</string>
   <string name="base10">Base 10</string>
   <string name="base16">Base 16</string>
+  <string name="base10_colon">Base 10:</string>
+  <string name="base16_colon">Base 16:</string>
   <string name="zero">0</string>
   <string name="one">1</string>
   <string name="dot">.</string>
